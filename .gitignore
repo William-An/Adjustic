@@ -1,0 +1,20 @@
+.DS_Store
+.DS_store
+.vscode/
+*.log
+*.tmp
+*.out
+*.o
+*.elf
+
+# SystemWorkbench setting
+.settings/
+CMSIS/
+inc/
+startup/
+StdPeriph_Driver
+Utilities/
+.cproject
+.project
+LinkerScript.ld
+STM32F0DISCOVERY.xml
