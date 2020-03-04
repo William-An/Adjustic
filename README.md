@@ -13,6 +13,8 @@ A self-balanced two wheel robot using:
 Project Architecture
 ![Design Structure](./docs/images/structure.png)
 
+## Components
+
 ## Materials to Learn
 
 * DMA
@@ -28,6 +30,25 @@ Project Architecture
 * SPI Protocol
   * For wireless controller
   * Textbook chapter 22.3
+
+## Collaboration Process Explanation
+
+### Terminology
+
+1. `dev` branch: hosts new features to be added to the project
+2. `master` branch: stable software release
+3. `pull request`: change by other collaborator to the branch
+   1. [ref](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
+4. Collaborator: developers working in this project
+
+### Development process
+
+1. All developing work will be conducted on `dev` branch
+   1. Modules/Features developing should be kept as local branches prior to integrate them to `dev` branch
+   2. Collaborators are expected to **test their modules/features** prior to submit a pull-request
+2. After **throughout** testing
+   1. Collaborator can submit a pull-request to the `master` branch
+   2. Other personnel should examine the submitted code throughly prior to approve the pull-request (code review)
 
 ## TODO
 
