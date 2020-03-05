@@ -30,6 +30,7 @@ Project Architecture
 * SPI Protocol
   * For wireless controller
   * Textbook chapter 22.3
+* [git operation](./docs/git_intro.md)
 
 ## Collaboration Process Explanation
 
