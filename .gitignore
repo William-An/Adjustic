@@ -9,11 +9,6 @@
 
 # SystemWorkbench setting
 .settings/
-CMSIS/
-inc/
-startup/
-StdPeriph_Driver
-Utilities/
 .cproject
 .project
 LinkerScript.ld
