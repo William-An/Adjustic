@@ -10,13 +10,38 @@ A self-balanced two wheel robot using:
   * [L293D](https://www.st.com/en/motor-drivers/l293d.html) Four channel motor driver
   * or [A4988](https://www.pololu.com/file/0J450/A4988.pdf) Stepper motor driver
 * Stepper motors
-  * [28BYJ-48](https://www.adafruit.com/product/858?gclid=CjwKCAiA44LzBRB-EiwA-jJipFIlivX6OHOKTyI2wocbWYVngoLbgBn7D_prLMaMkDIHmaRfBtIohhoCGWQQAvD_BwE) 5V 4 Phase DC Gear Stepper motor 15 N.cm
+  * [28BYJ-48](https://www.adafruit.com/product/858?gclid=CjwKCAiA44LzBRB-EiwA-jJipFIlivX6OHOKTyI2wocbWYVngoLbgBn7D_prLMaMkDIHmaRfBtIohhoCGWQQAvD_BwE) 5V 4 Phase DC Gear Stepper motor 15 N·cm
 * [NRF24L01](https://www.sparkfun.com/datasheets/Components/nRF24L01_prelim_prod_spec_1_2.pdf) 2.4GHz Transceiver
 
 Project Architecture
 ![Design Structure](./docs/images/structure.png)
 
-## Components
+## Objective
+
+1. [ ] Two wheel self-balanced within +3/-3 deg
+   1. [ ] PID controller
+   2. [ ] Angle/angular speed sensor interface
+   3. [ ] Driving chassis interface
+      1. [ ] Generic stepper motor interface
+      2. [ ] L293D interface
+   4. [ ] Logging library
+      1. Logging level
+         * `NONE`: Nothing gets logged
+         * `ERROR`: Only errors get logged
+         * `WARNING`: Errors and warning get logged
+         * `DEBUG`: More debugging related messages get logged
+         * `INFO`: Log everything
+      2. [ ] Error message and signal interface (buzzer, Leds)
+      3. [ ] UART serial debug message output
+         1. Only included in debug version of code
+2. [ ] Remote control via another STM32051R8T6 along with NRF24L01
+   1. [ ] Transimitter/Receiver generic communication interface
+      1. wrapper for various kind of SPI transimission device
+   2. [ ] Communication packet struct definition
+   3. [ ] NRF24L01 interface
+   4. [ ] User input panel
+      1. [ ] Digital button input
+      2. [ ] Analog joystick input
 
 ## Materials to Learn
 
@@ -94,6 +119,27 @@ Below are the coding standards for this project. Pull-request not following thes
     * `int i = 1;` rather than `int i=0;`
     * `if (a > 0)` rather than `if (a>0)`
 
+### Debug, Release, and Logging
+
+* Debug configuration code block
+  * In eclipse, the IDE will pass a c `#define DEBUG` directive in debug configuration when build for debug and not for release
+  * Therefore, it is wise to use this to limit some of the logging code to debug mode only using the following structure
+
+        // Debug block
+        #ifdef
+
+        // Code only gets to source code in debug build setting
+        
+        #else
+
+        // Optional branch which will get in to source code in release build setting
+         
+        #endif
+
+* Function implementation
+  * Use logging library `assert` to validate inputs
+  * and output error message (should be handled by logging library automatically)
+
 ### Comment specification
 
 An eclipse snippet template has been exported and can be downloaded [here](./docs/eclipse-templates.xml). You will need to import it to your eclipse workbench to use the keywords to invoke them. 
@@ -130,7 +176,7 @@ Block comment (keywordd: `comment`)
 
 ## TODO
 
-* [ ] Project proposal
+* [x] Project proposal
 * [ ] Robot component and subsystem architecture design
   * Protocols
   * Interrupts selection
