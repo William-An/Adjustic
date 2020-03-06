@@ -95,7 +95,7 @@ Below are the coding standards for this project. Pull-request not following thes
     * **NO** single letter naming unless as temporary variable in loop
       * ❌`int a = 0;`  
       * ✅`for (int i = 0; i < 10; i++);`
-    * Naming variable as `tmp` are allowed if the variable serves only as 
+    * Naming variable as `tmp` are allowed if the variable serves only as
       * place to temperarily hold exchanged value like in swapping two integer
       * value to be discarded / not used in current naming scope
     * Preferably variable with the same or similar purpose should have close name
@@ -118,6 +118,17 @@ Below are the coding standards for this project. Pull-request not following thes
   * Space around every equal sign or comparison symbol
     * `int i = 1;` rather than `int i=0;`
     * `if (a > 0)` rather than `if (a>0)`
+  * Header file
+    * While creating a new header file, use the [C header guard](https://www.learncpp.com/cpp-tutorial/header-guards/) as follows (for a header file named `stepper.h`)
+
+          #ifndef __STEPPER_H__
+          #define __STEPPER_H__
+
+          // Put function declaration
+          // Put constants
+          // here
+
+          #endif
 
 ### Debug, Release, and Logging
 
@@ -142,7 +153,7 @@ Below are the coding standards for this project. Pull-request not following thes
 
 ### Comment specification
 
-An eclipse snippet template has been exported and can be downloaded [here](./docs/eclipse-templates.xml). You will need to import it to your eclipse workbench to use the keywords to invoke them. 
+An eclipse snippet template has been exported and can be downloaded [here](./docs/eclipse-templates.xml). You will need to import it to your eclipse workbench to use the keywords to invoke them.
 
 Header comment (keyword: `header`)
 

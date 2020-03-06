@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
   * @file    main.c
-  * @author  Ac6
-  * @version V1.0
-  * @date    01-December-2013
-  * @brief   Default main function.
+  * @author  Weili An
+  * @version v1.0.0
+  * @date    Mar. 6th, 2020
+  * @brief   Main program for Adjustic, an autonomous self-balanced two wheel robot
   ******************************************************************************
 */
 
