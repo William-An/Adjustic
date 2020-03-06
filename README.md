@@ -5,7 +5,21 @@ This is the git repository for the Spring 2020 ECE 362 mini project.
 A self-balanced two wheel robot using:
 
 * STM32F051R8T6
-* [MPU9250](https://invensense.tdk.com/products/motion-tracking/9-axis/mpu-9250/) Nine-Axis acclerator, gyroscope, and compass
+* Sensor
+  * [MPU9250](https://invensense.tdk.com/products/motion-tracking/9-axis/mpu-9250/) Nine-Axis acclerator, gyroscope, and compass
+    * [Ardiuno example](https://learn.sparkfun.com/tutorials/mpu-9250-hookup-guide)
+      * include conversion from quaternion to euler's angle
+    * [MPU9250.h](https://github.com/kriswiner/MPU9250/blob/master/STM32F401/MPU9250.h)
+      * Include register map
+      * Include calculation of quaternion
+    * [Sparkfun MPU9250 DMP](https://github.com/sparkfun/SparkFun_MPU-9250-DMP_Arduino_Library)
+    * [Datasheet](https://invensense.tdk.com/wp-content/uploads/2015/02/PS-MPU-9250A-01-v1.1.pdf)
+    * [Register map](https://cdn.sparkfun.com/assets/learn_tutorials/5/5/0/MPU-9250-Register-Map.pdf)
+    * [MPU9250 App notes](https://gzuliani.bitbucket.io/arduino/files/arduino-mpu6050/invensense-hardware-offset-registers.pdf)
+    * Invensense has portable driver library with small amount of modification
+      * Navigate to their download page for more information
+  * [BNO055](https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BNO055-DS000.pdf)
+    * output angles directly
 * Stepper Motor driver
   * [L293D](https://www.st.com/en/motor-drivers/l293d.html) Four channel motor driver
   * or [A4988](https://www.pololu.com/file/0J450/A4988.pdf) Stepper motor driver
@@ -59,6 +73,9 @@ Project Architecture
   * For wireless controller
   * Textbook chapter 22.3
 * [git operation](./docs/git_intro.md)
+* [Stdperiph Lab](https://www.st.com/content/ccc/resource/technical/document/user_manual/59/2d/ab/ad/f8/29/49/d6/DM00023896.pdf/files/DM00023896.pdf/jcr:content/translations/en.DM00023896.pdf)
+  * Or browse through the `src` and `inc` folders under folder `StdPeriph_Driver`
+  * You can hold `cmd` while clicking the function name, type, or variable to search for its definition.
 
 ## Collaboration Process Explanation
 
@@ -212,3 +229,5 @@ Block comment (keywordd: `comment`)
     * Rough specification for motors and wheel
     * Basic structural design for robot
 * [ ] Develop schedule and task assignment
+* [ ] Project Development
+  * [ ] Add MPU9250 driver to project folder and create test file
