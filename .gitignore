@@ -1,11 +1,15 @@
 .DS_Store
 .DS_store
 .vscode/
+
+# Build output
 *.log
 *.tmp
 *.out
 *.o
 *.elf
+Debug/
+Release/
 
 # SystemWorkbench setting
 .settings/
@@ -13,3 +17,4 @@
 .project
 LinkerScript.ld
 STM32F0DISCOVERY.xml
+
