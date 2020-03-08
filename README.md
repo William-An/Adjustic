@@ -133,7 +133,7 @@ Below are the coding standards for this project. Pull-request not following thes
     * `int isError = 0;`
   * Typdef should follow the same standard as in Stdperiph firmware
     * `(PERIPH_NAME)_(def purpose)TypeDef`
-    * e.g. `Stepper_InitTypeDef`
+    * e.g. `Stepper_MotorTypeDef`
   * Constants need be capitalized and connected via underline `_`
     * e.g. `MAX_BUFF_SIZE`
   * Variable or constant naming must be meaningful
