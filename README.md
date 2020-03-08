@@ -98,6 +98,10 @@ In addition, you will also need to include the symbol `MPU9250` while compiling 
 
 Please please use the autocomplete on Eclipse. It saves both time and programmers' life. You can configure the shortcut key in `Preference` and search for `key` and in the shortcut mapping page, search for `content assist` (weird name BTW).
 
+### Enable auto discovery of symbols
+
+Refer to [this article](https://devzone.nordicsemi.com/nordic/nordic-blog/b/blog/posts/development-with-gcc-and-eclipse) of section *Enable auto discovery of symbols, include paths and compiler settings* for configuring the `CDT GCC Build Output Parser` so that the IDE will resolve the include symbol.
+
 ## Collaboration Process Explanation
 
 ### Terminology
