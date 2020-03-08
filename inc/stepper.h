@@ -20,7 +20,8 @@
 #include "stm32f0xx_gpio.h"
 
 // TODO Add docstring
-// TODO Add common motor typedef like 28BYJ
+// TODO Add generic timer handler?
+
 
 // ************************************************************************
 // Stepper motor configuration struct type definition
