@@ -99,6 +99,7 @@
 typedef int inv_error_t;
 #endif
 
+#define EMPL
 #if defined EMPL
 typedef unsigned long inv_time_t;
 #else

@@ -81,9 +81,9 @@ Project Architecture
 
 ### MPU9250 Library Path Configuration
 
-We will be using the MPU9250 library provided by the company Invensense to configure the MPU9250 chip and the DMP as well as API to interface with the IMU. 
+We will be using the MPU9250 library provided by the company Invensense to configure the MPU9250 chip and the DMP as well as API to interface with the IMU.
 
-To do so, you will need to add the following path to the project include path configuration (`Project->Properties->C/C++ Build->Settings->GCC Compiler setting include`)
+To do so, make sure you have correctly import the project into your SystemWorkbench. The configuration file `.cproject` should automatically add the following include path. If not, you will need to add the following path to the project include path configuration (`Project->Properties->C/C++ Build->Settings->GCC Compiler setting include`)
 
     "${ProjDirPath}/MPU9250_Driver/driver/include"
     "${ProjDirPath}/MPU9250_Driver/driver/eMPL"
@@ -91,7 +91,9 @@ To do so, you will need to add the following path to the project include path co
     "${ProjDirPath}/MPU9250_Driver/eMPL-hal"
     "${ProjDirPath}/MPU9250_Driver/mllite"
     "${ProjDirPath}/MPU9250_Driver/mpl"
-    
+
+In addition, you will also need to include the symbol `MPU9250` while compiling for both debug and release configuration. Again, this should be handled automatically by properly importing the project. If not, plesae add symbol `MPU9250` to your compiler preprocessor setting (`Project->Properties->C/C++ Build->Settings->GCC Compiler setting preprocessor`). Or you can pass the flag `-D MPU9250` while using the compiler.
+
 ### Autocomplete functionality
 
 Please please use the autocomplete on Eclipse. It saves both time and programmers' life. You can configure the shortcut key in `Preference` and search for `key` and in the shortcut mapping page, search for `content assist` (weird name BTW).
@@ -215,11 +217,17 @@ Function docstring (keyword: `docstring`)
     * 
     ************************************************************/
 
-Block comment (keywordd: `comment`)
+Block comment (keyword: `comment`) to indicate the purpose of a large section of code
 
     /************************************************************
     * COMMENTS
     ************************************************************/
+
+Multi-line comment to comment over a few lines
+
+    /*
+     * Comment goes here
+     */
 
 ## TODO
 

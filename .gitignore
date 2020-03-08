@@ -11,10 +11,3 @@
 Debug/
 Release/
 
-# SystemWorkbench setting
-.settings/
-.cproject
-.project
-LinkerScript.ld
-STM32F0DISCOVERY.xml
-

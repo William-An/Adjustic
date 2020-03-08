@@ -32,6 +32,10 @@
  * delay_ms(unsigned long num_ms)
  * get_ms(unsigned long *count)
  */
+
+// TODO Add function definition for STM32F0
+
+
 #if defined EMPL_TARGET_STM32F4
 #include "i2c.h"   
 #include "main.h"
@@ -70,6 +74,14 @@
 #define get_ms  uc3l0_get_clock_ms
 #define log_i       MPL_LOGI
 #define log_e       MPL_LOGE
+
+
+#elif defined STM32F0
+/*
+ * I2C read and write function for STM32F0
+ */
+
+// todo add i2c read and write function here
 
 #else
 #error  Gyro driver is missing the system layer implementations.

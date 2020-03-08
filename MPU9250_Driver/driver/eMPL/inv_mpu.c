@@ -119,6 +119,14 @@ static inline int reg_int_cb(struct int_param_s *int_param)
 /* UC3 is a 32-bit processor, so abs and labs are equivalent. */
 #define labs        abs
 #define fabs(x)     (((x)>0)?(x):-(x))
+
+#elif defined STM32F0
+/*
+ * I2C read and write function for STM32F0
+ */
+
+// todo add i2c read and write function here
+
 #else
 #error  Gyro driver is missing the system layer implementations.
 #endif
