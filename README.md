@@ -131,6 +131,9 @@ Below are the coding standards for this project. Pull-request not following thes
   * Variables and function naming must follow camelCase naming format
     * `void getChar(int tmp);`
     * `int isError = 0;`
+  * Typdef should follow the same standard as in Stdperiph firmware
+    * `(PERIPH_NAME)_(def purpose)TypeDef`
+    * e.g. `Stepper_InitTypeDef`
   * Constants need be capitalized and connected via underline `_`
     * e.g. `MAX_BUFF_SIZE`
   * Variable or constant naming must be meaningful
@@ -261,4 +264,5 @@ Multi-line comment to comment over a few lines
     * Basic structural design for robot
 * [ ] Develop schedule and task assignment
 * [ ] Project Development
-  * [ ] Add MPU9250 driver to project folder and create test file
+  * [x] Configure IDE
+  * [x] Add MPU9250 driver to project folder and create test file
