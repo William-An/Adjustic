@@ -73,9 +73,28 @@ Project Architecture
   * For wireless controller
   * Textbook chapter 22.3
 * [git operation](./docs/git_intro.md)
-* [Stdperiph Lab](https://www.st.com/content/ccc/resource/technical/document/user_manual/59/2d/ab/ad/f8/29/49/d6/DM00023896.pdf/files/DM00023896.pdf/jcr:content/translations/en.DM00023896.pdf)
+* [Stdperiph Lib](https://www.st.com/content/ccc/resource/technical/document/user_manual/59/2d/ab/ad/f8/29/49/d6/DM00023896.pdf/files/DM00023896.pdf/jcr:content/translations/en.DM00023896.pdf)
   * Or browse through the `src` and `inc` folders under folder `StdPeriph_Driver`
   * You can hold `cmd` while clicking the function name, type, or variable to search for its definition.
+
+## Before Coding/Building
+
+### MPU9250 Library Path Configuration
+
+We will be using the MPU9250 library provided by the company Invensense to configure the MPU9250 chip and the DMP as well as API to interface with the IMU. 
+
+To do so, you will need to add the following path to the project include path configuration (`Project->Properties->C/C++ Build->Settings->GCC Compiler setting include`)
+
+    "${ProjDirPath}/MPU9250_Driver/driver/include"
+    "${ProjDirPath}/MPU9250_Driver/driver/eMPL"
+    "${ProjDirPath}/MPU9250_Driver/driver/stm32L"
+    "${ProjDirPath}/MPU9250_Driver/eMPL-hal"
+    "${ProjDirPath}/MPU9250_Driver/mllite"
+    "${ProjDirPath}/MPU9250_Driver/mpl"
+    
+### Autocomplete functionality
+
+Please please use the autocomplete on Eclipse. It saves both time and programmers' life. You can configure the shortcut key in `Preference` and search for `key` and in the shortcut mapping page, search for `content assist` (weird name BTW).
 
 ## Collaboration Process Explanation
 
