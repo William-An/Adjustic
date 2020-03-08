@@ -38,7 +38,9 @@ Project Architecture
    3. [ ] Driving chassis interface
       1. [ ] Generic stepper motor interface
       2. [ ] L293D interface
-   4. [ ] Logging library
+   4. [ ] Concurrent execution
+      1. extensively utilize DMA, interrupts, free run timer to execute task
+   5. [ ] Logging library
       1. Logging level
          * `NONE`: Nothing gets logged
          * `ERROR`: Only errors get logged
@@ -52,7 +54,8 @@ Project Architecture
    1. [ ] Transimitter/Receiver generic communication interface
       1. wrapper for various kind of SPI transimission device
    2. [ ] Communication packet struct definition
-   3. [ ] NRF24L01 interface
+   3. [ ] Generic Communication interface
+      1. [ ] NRF24L01 interface
    4. [ ] User input panel
       1. [ ] Digital button input
       2. [ ] Analog joystick input

@@ -14,7 +14,19 @@
 
 #include "stepper.h"            // Include generic stepper control library
 #include "adjustic_utils.h"     // Utils types def
+#include "stm32f0xx.h"
+#include "stm32f0xx_rcc.h"
+#include "stm32f0xx_gpio.h"
+#include "stm32f0xx_misc.h"
+#include "stm32f0xx_tim.h"
 
+// ************************************************************************
+// L293D configuration struct and functions definition and declaration
+// ************************************************************************
+
+#define PIN_COUNT 4 // Only 4 wire configuration stepper motor supported
+
+// TODO Predefine CCR value array for each type of stepping?
 // TODO Add microstepping pwm CCR value sequence or generate during initialization
 
 // Additional configuration struct for driver chip
@@ -22,18 +34,26 @@
 typedef void (*_L293D_stepFunction) (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float speedRatio);
 
 // Config struct
-// TODO Add timer? and channel
+// TODO For Microstepping control, also need an additional PWM timer?
+// Or add a PWM control library to project
 typedef struct {
     GPIO_PINTypedef*    phaseAPosPin;
     GPIO_PINTypedef*    phaseANegPin;
     GPIO_PINTypedef*    phaseBPosPin;
     GPIO_PINTypedef*    phaseBNegPin;
     _L293D_stepFunction stepFunc;
-    TIM_TypeDef*        timer;          // Timer 
-    uint16_t            channel;        // channel for timing the stepping
-    uint8_t             currentTick;    // current tick for stepping (4 ticks for full stepping, 8 for half, etc.)
-    uint8_t             MAX_TICKS;      // Maximum ticks for stepping
+    TIM_TypeDef*        mainTimer;      // Main Timer for stepper motor tick control
+    uint32_t            lastCount;      // Interupt count from last tick, 
+    uint16_t            usPerInterrupt; // Specify the time in microsecond between two main timer update interrupt to enable flexible interrupting
+    uint8_t             currentTick;    // current tick for stepping (4 ticks for full stepping, 8 for half, etc.) or ticks per step
+    uint16_t            usPerTick;      // Time in microsecond for each tick
+    uint8_t             MAX_TICKS;      // Maximum ticks for stepping, can use the L293D_TicksPerStepTypedef value
 } L293D_ConfigTypedef;
+
+typedef enum {
+    FULL_STEPPING_TICKS = 4,
+    HALF_STEPPING_TICKS = 8
+} L293D_TicksPerStepTypedef;
 
 // "public" function declaration
 bool l293dStepperInit (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
