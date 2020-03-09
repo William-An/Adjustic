@@ -79,6 +79,6 @@ void _l293dHalfStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_Ad
 void _l293dMicroStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
 
 // Put this in the corresponding timer irq to handle the timing of the stepper motor control
-void L293D_TIMING_Channel_IRQHandler(Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
+void l293DStepperIRQHandler(Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
 
 #endif

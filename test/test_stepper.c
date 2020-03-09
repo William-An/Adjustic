@@ -31,14 +31,15 @@ int test_stepper(void)
 
 // Use timer 6 for delay
 void TIM6_DAC_IRQHandler() {
-	L293D_TIMING_Channel_IRQHandler(motor, (void *) config);
+	stepIRQHandler(driver, motor, (void *) config);
 }
 
 void setup() {
-	driver = (Stepper_DriverTypeDef*) malloc(sizeof(Stepper_DriverTypeDef));
+	driver						= (Stepper_DriverTypeDef*) malloc(sizeof(Stepper_DriverTypeDef));
 	driver->init 				= l293dStepperInit;
 	driver->stepAngularSpeed 	= l293dStepperStepAngularSpeed;
 	driver->stepDegree			= l293dStepperStepbyStep;
+	driver->stepIRQHandler		= l293DStepperIRQHandler;
 
 	// Configure motor
 	motor->STEP_MODE = FULL_STEPPING;

@@ -9,6 +9,8 @@
 *
 ************************************************************/
 
+// todo update docstring 
+
 #include "stepper.h"
 
 // Bipolar configuration for 28BYJ-48 Stepper motor
@@ -16,6 +18,14 @@ extern Stepper_MotorTypeDef _MOTOR_28BYJ48 = {
     .STEPS_PER_REV  = 513,
     .MAX_SPEED      = 240,          // RPM: 10 ~ 15 at 5V with 1/16 reduction gearbox, thus 160
     .STEP_MODE      = FULL_STEPPING,
+    .IS_UNIPOLAR    = false,
+    .MOTOR_WIRE     = 4
+};
+
+extern Stepper_MotorTypeDef _STEPPERONLINE_NEMA_17_59NCM = {
+    .STEPS_PER_REV  = 200,  // 1.8 degree per step
+    .MAX_SPEED      = 600,
+    .STEP_MODE      = HALF_STEPPING,
     .IS_UNIPOLAR    = false,
     .MOTOR_WIRE     = 4
 };
@@ -33,8 +43,6 @@ extern Stepper_MotorTypeDef* MOTOR_28BYJ48 = &_MOTOR_28BYJ48;
 * @param:   stepperx, Stepper_DriverTypeDef, type of stepper motor 
 *           Driver
 * @param:   Stepper_MotorStruct, Stepper_MotorTypeDef, motor specs
-* @param:   config, uint_8 pointer, config in bytes
-* @param:   configSize, size_t, length of config bytes string
 * @return:  isSuccess, bool, init failed or succeed
 *
 ************************************************************/
@@ -81,4 +89,17 @@ void stepDegree (Stepper_DriverTypeDef * Stepperx, Stepper_MotorTypeDef* Stepper
 
 void stepAngularSpeed (Stepper_DriverTypeDef * stepperx, Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float degSpeed) {
     stepperx->stepDegree(Stepper_MotorStruct, Stepper_AdditionalConfigStruct, degSpeed);
+}
+
+/************************************************************
+*
+* Function: stepIRQHandler
+* @brief:   generic function to advance steps
+* @param:   function parameter name, type, and short explanation
+* @return:  void
+*
+************************************************************/
+
+void stepIRQHandler (Stepper_DriverTypeDef * stepperx, Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct) {
+    stepperx->stepIRQHandler(Stepper_MotorStruct, Stepper_AdditionalConfigStruct);
 }

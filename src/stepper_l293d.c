@@ -324,7 +324,7 @@ void _l293dMicroStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_A
 // ************************************************************************
 
 // TODO Need to handle the case when CRR is set to 0 while the counter value is also 0, happens every 43000 seconds if using a 32-bit counter
-void L293D_TIMING_Channel_IRQHandler(Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct) {
+void l293DStepperIRQHandler(Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct) {
     L293D_ConfigTypedef* config = (L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct;
     if (TIM_GetFlagStatus(config->mainTimer, TIM_FLAG_Update) == SET) {
         // Acknowledge interrupt

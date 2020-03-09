@@ -32,7 +32,11 @@ typedef enum {
     WAVE_STEPPING,
     FULL_STEPPING,
     HALF_STEPPING,
-    MICRO_STEPPING
+    MICRO_STEPPING,
+    FOURTH_STEPPING,
+    EIGHTH_STEPPING,
+    SIXTEENTH_STEPPING,
+    THIRTY_SECOND_STEPPING
 } Stepper_StepTypeDef;
 
 // Stepper motor configuration
@@ -111,13 +115,25 @@ typedef void (*genericStepDegree) (Stepper_MotorTypeDef* Stepper_MotorStruct, vo
 
 typedef void (*genericStepAngularSpeed) (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float degSpeed);
 
+/************************************************************
+*
+* Function: genericStepIRQHandler
+* @brief:   Timer irq function for advancing steps
+* @param:   Stepper_MotorStruct, Stepper_MotorTypeDef, motor specs
+* @return:  void
+*
+************************************************************/
+
+typedef void (*genericStepIRQHandler) (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
+
 // When using this type, client should assign the specific methods first 
 // before calling them
 
 typedef struct {
-    genericStepInit init;
-    genericStepDegree stepDegree;
+    genericStepInit         init;
+    genericStepDegree       stepDegree;
     genericStepAngularSpeed stepAngularSpeed;
+    genericStepIRQHandler   stepIRQHandler;
 } Stepper_DriverTypeDef;
 
 // ************************************************************************
@@ -127,5 +143,6 @@ typedef struct {
 bool stepInit (Stepper_DriverTypeDef * stepperx, Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
 void stepDegree (Stepper_DriverTypeDef * Stepperx, Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float degree);
 void stepAngularSpeed (Stepper_DriverTypeDef * stepperx, Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float degSpeed);
+void stepIRQHandler (Stepper_DriverTypeDef * stepperx, Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
 
 #endif
