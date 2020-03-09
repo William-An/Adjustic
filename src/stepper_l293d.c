@@ -27,6 +27,19 @@
 // "Public" function for generic stepper driver
 // ************************************************************************
 
+
+void l293dStepperStructInit (L293D_ConfigTypedef* Stepper_AdditionalConfigStruct) {
+    Stepper_AdditionalConfigStruct->phaseAPosPin    = (GPIO_PINTypedef *) malloc(sizeof(GPIO_PINTypedef));
+    Stepper_AdditionalConfigStruct->phaseANegPin    = (GPIO_PINTypedef *) malloc(sizeof(GPIO_PINTypedef));
+    Stepper_AdditionalConfigStruct->phaseBPosPin    = (GPIO_PINTypedef *) malloc(sizeof(GPIO_PINTypedef));
+    Stepper_AdditionalConfigStruct->phaseBNegPin    = (GPIO_PINTypedef *) malloc(sizeof(GPIO_PINTypedef));
+    Stepper_AdditionalConfigStruct->sinceLast       = 0;
+    Stepper_AdditionalConfigStruct->usPerInterrupt  = 0;
+    Stepper_AdditionalConfigStruct->currentTick     = 0;
+    Stepper_AdditionalConfigStruct->MAX_TICKS       = 0;
+    Stepper_AdditionalConfigStruct->speedRatio      = 1.0;
+}
+
 /************************************************************
 *
 * Function: l293dStepperInit
@@ -102,24 +115,24 @@ bool l293dStepperInit (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_
     switch (Stepper_MotorStruct->STEP_MODE)
     {
     case WAVE_STEPPING:
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->stepFunc = _l293dWaveStep;
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->MAX_TICKS = 4;
+        config->stepFunc = _l293dWaveStep;
+        config->MAX_TICKS = 4;
         break;
     case FULL_STEPPING:
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->stepFunc = _l293dFullStep;
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->MAX_TICKS = 4;
+        config->stepFunc = _l293dFullStep;
+        config->MAX_TICKS = 4;
         break;
     case HALF_STEPPING:
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->stepFunc = _l293dHalfStep;
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->MAX_TICKS = 8;
+        config->stepFunc = _l293dHalfStep;
+        config->MAX_TICKS = 8;
         break;
     // TODO Breakdown to 1/4, 1/8, 1/16 or add configuration?
     case MICRO_STEPPING:
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->stepFunc = _l293dMicroStep;
+        config->stepFunc = _l293dMicroStep;
         break;
     default:
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->stepFunc = _l293dFullStep;
-        ((L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct)->MAX_TICKS = 4;
+        config->stepFunc = _l293dFullStep;
+        config->MAX_TICKS = 4;
         break;
     }
 
@@ -184,15 +197,120 @@ void l293dStepperStepAngularSpeed (Stepper_MotorTypeDef* Stepper_MotorStruct, vo
 // "Private" helper function
 // ************************************************************************
 
-void _l293dWaveStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float speedRatio) {
-
+void _l293dWaveStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct) {
+    // todo Use predefined sequence to configure outputs
+    // TODO the switch-case only mean for testing
+    L293D_ConfigTypedef* config = (L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct;
+    switch (config->currentTick) {
+        default:
+        case 0:
+            /*
+             * A: High
+             * A_N: Low
+             * B: Low
+             * B_N: Low
+             * */
+            GPIO_SetBits(config->phaseAPosPin->port, config->phaseAPosPin->pin);
+            GPIO_ResetBits(config->phaseBPosPin->port, config->phaseBPosPin->pin);
+            GPIO_ResetBits(config->phaseANegPin->port, config->phaseANegPin->pin);
+            GPIO_ResetBits(config->phaseBNegPin->port, config->phaseBNegPin->pin);
+            break;
+        case 1:
+            /*
+             * A: Low
+             * B: High
+             * A_N: Low
+             * B_N: Low
+             * */
+            GPIO_ResetBits(config->phaseAPosPin->port, config->phaseAPosPin->pin);
+            GPIO_SetBits(config->phaseBPosPin->port, config->phaseBPosPin->pin);
+            GPIO_ResetBits(config->phaseANegPin->port, config->phaseANegPin->pin);
+            GPIO_ResetBits(config->phaseBNegPin->port, config->phaseBNegPin->pin);
+            break;
+        case 2:
+            /*
+             * A: Low
+             * B: Low
+             * A_N: High
+             * B_N: Low
+             * */
+            GPIO_ResetBits(config->phaseAPosPin->port, config->phaseAPosPin->pin);
+            GPIO_ResetBits(config->phaseBPosPin->port, config->phaseBPosPin->pin);
+            GPIO_SetBits(config->phaseANegPin->port, config->phaseANegPin->pin);
+            GPIO_ResetBits(config->phaseBNegPin->port, config->phaseBNegPin->pin);
+            break;
+        case 3:
+            /*
+             * A: Low
+             * B: Low
+             * A_N: Low
+             * B_N: High
+             * */
+            GPIO_ResetBits(config->phaseAPosPin->port, config->phaseAPosPin->pin);
+            GPIO_ResetBits(config->phaseBPosPin->port, config->phaseBPosPin->pin);
+            GPIO_ResetBits(config->phaseANegPin->port, config->phaseANegPin->pin);
+            GPIO_SetBits(config->phaseBNegPin->port, config->phaseBNegPin->pin);
+            break;
+    }
 }
 
-void _l293dFullStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float speedRatio) {
-
+void _l293dFullStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct) {
+    // todo Use predefined sequence to configure outputs
+    L293D_ConfigTypedef* config = (L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct;
+    switch (config->currentTick) {
+        default:
+        case 0:
+            /*
+             * A: High
+             * A_N: Low
+             * B: Low
+             * B_N: High
+             * */
+            GPIO_SetBits(config->phaseAPosPin->port, config->phaseAPosPin->pin);
+            GPIO_ResetBits(config->phaseBPosPin->port, config->phaseBPosPin->pin);
+            GPIO_ResetBits(config->phaseANegPin->port, config->phaseANegPin->pin);
+            GPIO_SetBits(config->phaseBNegPin->port, config->phaseBNegPin->pin);
+            break;
+        case 1:
+            /*
+             * A: High
+             * B: High
+             * A_N: Low
+             * B_N: Low
+             * */
+        	GPIO_SetBits(config->phaseAPosPin->port, config->phaseAPosPin->pin);
+            GPIO_SetBits(config->phaseBPosPin->port, config->phaseBPosPin->pin);
+            GPIO_ResetBits(config->phaseANegPin->port, config->phaseANegPin->pin);
+            GPIO_ResetBits(config->phaseBNegPin->port, config->phaseBNegPin->pin);
+            break;
+        case 2:
+            /*
+             * A: Low
+             * B: High
+             * A_N: High
+             * B_N: Low
+             * */
+            GPIO_ResetBits(config->phaseAPosPin->port, config->phaseAPosPin->pin);
+            GPIO_SetBits(config->phaseBPosPin->port, config->phaseBPosPin->pin);
+            GPIO_SetBits(config->phaseANegPin->port, config->phaseANegPin->pin);
+            GPIO_ResetBits(config->phaseBNegPin->port, config->phaseBNegPin->pin);
+            break;
+        case 3:
+            /*
+             * A: Low
+             * B: Low
+             * A_N: High
+             * B_N: High
+             * */
+            GPIO_ResetBits(config->phaseAPosPin->port, config->phaseAPosPin->pin);
+            GPIO_ResetBits(config->phaseBPosPin->port, config->phaseBPosPin->pin);
+            GPIO_SetBits(config->phaseANegPin->port, config->phaseANegPin->pin);
+            GPIO_SetBits(config->phaseBNegPin->port, config->phaseBNegPin->pin);
+            break;
+    }
 }
 
-void _l293dHalfStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float speedRatio) {
+void _l293dHalfStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct) {
 
 }
 
@@ -207,6 +325,19 @@ void _l293dMicroStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_A
 
 // TODO Need to handle the case when CRR is set to 0 while the counter value is also 0, happens every 43000 seconds if using a 32-bit counter
 void L293D_TIMING_Channel_IRQHandler(Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct) {
-    // Advance one tick if timing has matched
+    L293D_ConfigTypedef* config = (L293D_ConfigTypedef *) Stepper_AdditionalConfigStruct;
+    if (TIM_GetFlagStatus(config->mainTimer, TIM_FLAG_Update) == SET) {
+        // Acknowledge interrupt
+        TIM_ClearFlag(config->mainTimer, TIM_FLAG_Update);
+        
+        // Advance one tick if timing has matched
+        config->sinceLast += 1;
+        if (config->sinceLast * config->usPerInterrupt >= config->usPerTick) {
+            config->currentTick += 1;
+            config->currentTick = config->currentTick % config->MAX_TICKS;
+            config->sinceLast = 0;
+            config->stepFunc(Stepper_MotorStruct, Stepper_AdditionalConfigStruct);
+        }
+    }
 
 }

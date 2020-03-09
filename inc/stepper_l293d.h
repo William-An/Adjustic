@@ -31,11 +31,12 @@
 
 // Additional configuration struct for driver chip
 
-typedef void (*_L293D_stepFunction) (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float speedRatio);
+typedef void (*_L293D_stepFunction) (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
 
 // Config struct
 // TODO For Microstepping control, also need an additional PWM timer?
 // Or add a PWM control library to project
+// todo add steps left for irq to know how many steps it will need to step;
 typedef struct {
     GPIO_PINTypedef*    phaseAPosPin;
     GPIO_PINTypedef*    phaseANegPin;
@@ -43,11 +44,12 @@ typedef struct {
     GPIO_PINTypedef*    phaseBNegPin;
     _L293D_stepFunction stepFunc;
     TIM_TypeDef*        mainTimer;      // Main Timer for stepper motor tick control
-    uint32_t            lastCount;      // Interupt count from last tick, 
+    uint32_t            sinceLast;      // Interupt count since last tick, 
     uint16_t            usPerInterrupt; // Specify the time in microsecond between two main timer update interrupt to enable flexible interrupting
     uint8_t             currentTick;    // current tick for stepping (4 ticks for full stepping, 8 for half, etc.) or ticks per step
     uint16_t            usPerTick;      // Time in microsecond for each tick
     uint8_t             MAX_TICKS;      // Maximum ticks for stepping, can use the L293D_TicksPerStepTypedef value
+    float               speedRatio;     // Ratio with regard to maximum speed, ranging from 0.0 to 1.0
 } L293D_ConfigTypedef;
 
 typedef enum {
@@ -56,6 +58,10 @@ typedef enum {
 } L293D_TicksPerStepTypedef;
 
 // "public" function declaration
+void l293dStepperStructInit (L293D_ConfigTypedef* Stepper_AdditionalConfigStruct);
+
+void l293dStepperStructDeInit (L293D_ConfigTypedef* Stepper_AdditionalConfigStruct);
+
 bool l293dStepperInit (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
 void l293dStepperStepbyStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float steps);
 void l293dStepperStepDegree (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float deg);
@@ -64,9 +70,9 @@ void l293dStepperStepAngularSpeed (Stepper_MotorTypeDef* Stepper_MotorStruct, vo
 // helpful private functions
 // like wavestep, half step, full step, micro step
 // with the ability to adjust pulseWidthRatio with the pulse width needed to achieve maximum speed to provide speed control
-void _l293dWaveStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float speedRatio);
-void _l293dFullStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float speedRatio);
-void _l293dHalfStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct, float speedRatio);
+void _l293dWaveStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
+void _l293dFullStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
+void _l293dHalfStep (Stepper_MotorTypeDef* Stepper_MotorStruct, void* Stepper_AdditionalConfigStruct);
 
 // TODO Microstepping needs more reading
 // TODO Add enum type to specify stepping fraction?
